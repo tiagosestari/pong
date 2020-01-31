@@ -77,6 +77,13 @@ def paddle_b_down():
     y = y - 20
     paddle_b.sety(y)
 
+#this function makes the ball move faster. I'll call it everytime something gets hit.
+def improve_difficulty():
+    global game_speed
+    if game_speed > 0.002:
+        game_speed = game_speed - 0.002
+
+
 #Listeners
 wn.listen()
 wn.onkeypress(paddle_a_up, "w")
@@ -100,11 +107,15 @@ while True:
         ball.sety(290)
         ball.dy = ball.dy*(-1)
         winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
+        improve_difficulty()
+
 
     if ball.ycor() < -290:
         ball.sety(-290)
         ball.dy = ball.dy*(-1)
         winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
+        improve_difficulty()
+
 
     #check for point
     if ball.xcor() > 400:
@@ -114,6 +125,8 @@ while True:
         pen.clear()
         pen.write("Player A: {} Player B: {}".format(score_a,  score_b), align="center", font=("Courier",24,"normal"))
         winsound.Beep(800,300)
+        #when someone makes a point speed gets reseted.
+        game_speed = 0.02
 
     if ball.xcor() < -400:
         ball.goto(0,0)
@@ -122,16 +135,22 @@ while True:
         pen.clear()
         pen.write("Player A: {} Player B: {}".format(score_a,  score_b), align="center", font=("Courier",24,"normal"))
         winsound.Beep(800,300)
+        #when someone makes a point speed gets reseted.
+        game_speed = 0.02
 
     #paddle and ball collisions
     if (ball.xcor() > 345 and ball.xcor() < 350 and (ball.ycor() < paddle_b.ycor() + 40 and ball.ycor() > paddle_b.ycor() - 40)):
         ball.setx(345)
         ball.dx = ball.dx * (-1)
         winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
+        improve_difficulty()
+
 
     if (ball.xcor() < -345 and ball.xcor() > -350 and (ball.ycor() < paddle_a.ycor() + 40 and ball.ycor() > paddle_a.ycor() - 40)):
         ball.setx(-345)
         ball.dx = ball.dx * (-1)
         winsound.PlaySound("bounce.wav", winsound.SND_ASYNC)
+        improve_difficulty()
+
 
     time.sleep(game_speed)
